@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="4" time="0.068" timestamp="2023-03-01T13:08:32.098753" hostname="LAPTOP-BA3DMH2D">
+<testcase classname="test.test_math_func" name="test_scott_data" time="0.002" />
+<testcase classname="test.test_math_func" name="test_mark_data" time="0.001" />
+<testcase classname="test.test_math_func2" name="test_scott_data" time="0.002" />
+<testcase classname="test.test_math_func2" name="test_mark_data" time="0.001" />
+</testsuite></testsuites>

@@ -1,0 +1,16 @@
+pip install -U pytest
+python3 -m pip show pytest
+python -m pytest test_math_func.py 
+sudo apt-get install python-dev gcc
+python3 -m coverage --version
+pip install coverage
+
+python3 -m coverage run -m pytest test/test_math_func.py --junitxml=./report.xml -v
+python3 -m coverage report  test/test_math_func.py
+
+python3  -m  pytest -k tests  -v
+
+
+
+python3 -m coverage run -m pytest tests
+ python3 -m coverage report
