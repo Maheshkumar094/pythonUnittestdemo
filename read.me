@@ -12,6 +12,6 @@ python3  -m  pytest -k tests  -v
 
 
 
-python3 -m coverage run -m pytest tests
+python3 -m coverage run -m pytest tests --junitxml=./report.xml -v
 python3 -m coverage report
 python3 -m coverage html

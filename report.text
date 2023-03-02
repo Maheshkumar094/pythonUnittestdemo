@@ -1,0 +1,56 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-7.2.1, pluggy-1.0.0
+rootdir: /home/mahi/pythondemo
+collected 3 items
+
+tests/test_aggregate_stocks.py ..                                        [ 66%]
+tests/test_filter_stocks.py F                                            [100%]
+
+=================================== FAILURES ===================================
+____________________________ test_filter_above_400 _____________________________
+
+spark = <pyspark.sql.session.SparkSession object at 0x7f079056d3d0>
+stock_data = DataFrame[stock: string, price: bigint]
+
+    def test_filter_above_400(spark, stock_data):
+        expected_data = [
+            {"stock": "BB", "price": 200},
+            {"stock": "CC", "price": 750},
+        ]
+        expected_result = spark.createDataFrame(Row(**x) for x in expected_data)
+        result = filter_above_400(stock_data)
+>       assert_df_equality(result, expected_result)
+
+tests/test_filter_stocks.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../virtualenv/lib/python3.8/site-packages/chispa/dataframe_comparer.py:29: in assert_df_equality
+    assert_basic_rows_equality(df1, df2)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+df1 = DataFrame[stock: string, price: bigint]
+df2 = DataFrame[stock: string, price: bigint]
+
+    def assert_basic_rows_equality(df1, df2):
+        rows1 = df1.collect()
+        rows2 = df2.collect()
+        if rows1 != rows2:
+            t = PrettyTable(["df1", "df2"])
+            zipped = list(six.moves.zip_longest(rows1, rows2))
+            for r1, r2 in zipped:
+                if r1 == r2:
+                    t.add_row([blue(r1), blue(r2)])
+                else:
+                    t.add_row([r1, r2])
+>           raise DataFramesNotEqualError("\n" + t.get_string())
+E           chispa.dataframe_comparer.DataFramesNotEqualError: 
+E           +----------------------------+----------------------------+
+E           |            df1             |            df2             |
+E           +----------------------------+----------------------------+
+E           | Row(stock='BB', price=600) | Row(stock='BB', price=200) |
+E           | [34mRow(stock='CC', price=750)[31m | [34mRow(stock='CC', price=750)[31m |
+E           +----------------------------+----------------------------+
+
+../virtualenv/lib/python3.8/site-packages/chispa/dataframe_comparer.py:80: DataFramesNotEqualError
+=========================== short test summary info ============================
+FAILED tests/test_filter_stocks.py::test_filter_above_400 - chispa.dataframe_...
+========================= 1 failed, 2 passed in 16.15s =========================

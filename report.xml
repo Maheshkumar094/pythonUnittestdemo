@@ -1,7 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="4" time="0.068" timestamp="2023-03-01T13:08:32.098753" hostname="LAPTOP-BA3DMH2D">
-<testcase classname="test.test_math_func" name="test_scott_data" time="0.002" />
-<testcase classname="test.test_math_func" name="test_mark_data" time="0.001" />
-<testcase classname="test.test_math_func2" name="test_scott_data" time="0.002" />
-<testcase classname="test.test_math_func2" name="test_mark_data" time="0.001" />
-</testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="16.362" timestamp="2023-03-02T19:26:38.044056" hostname="LAPTOP-BA3DMH2D"><testcase classname="tests.test_aggregate_stocks" name="test_get_max_stock_price" time="13.190" /><testcase classname="tests.test_aggregate_stocks" name="test_get_min_stock_price" time="1.603" /><testcase classname="tests.test_filter_stocks" name="test_filter_above_400" time="1.188"><failure message="chispa.dataframe_comparer.DataFramesNotEqualError: &#10;+----------------------------+----------------------------+&#10;|            df1             |            df2             |&#10;+----------------------------+----------------------------+&#10;| Row(stock='BB', price=600) | Row(stock='BB', price=200) |&#10;| #x1B[34mRow(stock='CC', price=750)#x1B[31m | #x1B[34mRow(stock='CC', price=750)#x1B[31m |&#10;+----------------------------+----------------------------+">spark = &lt;pyspark.sql.session.SparkSession object at 0x7faa5fdaf670&gt;, stock_data = DataFrame[stock: string, price: bigint]
+
+    def test_filter_above_400(spark, stock_data):
+        expected_data = [
+            {"stock": "BB", "price": 200},
+            {"stock": "CC", "price": 750},
+        ]
+        expected_result = spark.createDataFrame(Row(**x) for x in expected_data)
+        result = filter_above_400(stock_data)
+&gt;       assert_df_equality(result, expected_result)
+
+tests/test_filter_stocks.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../virtualenv/lib/python3.8/site-packages/chispa/dataframe_comparer.py:29: in assert_df_equality
+    assert_basic_rows_equality(df1, df2)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+df1 = DataFrame[stock: string, price: bigint], df2 = DataFrame[stock: string, price: bigint]
+
+    def assert_basic_rows_equality(df1, df2):
+        rows1 = df1.collect()
+        rows2 = df2.collect()
+        if rows1 != rows2:
+            t = PrettyTable(["df1", "df2"])
+            zipped = list(six.moves.zip_longest(rows1, rows2))
+            for r1, r2 in zipped:
+                if r1 == r2:
+                    t.add_row([blue(r1), blue(r2)])
+                else:
+                    t.add_row([r1, r2])
+&gt;           raise DataFramesNotEqualError("\n" + t.get_string())
+E           chispa.dataframe_comparer.DataFramesNotEqualError: 
+E           +----------------------------+----------------------------+
+E           |            df1             |            df2             |
+E           +----------------------------+----------------------------+
+E           | Row(stock='BB', price=600) | Row(stock='BB', price=200) |
+E           | #x1B[34mRow(stock='CC', price=750)#x1B[31m | #x1B[34mRow(stock='CC', price=750)#x1B[31m |
+E           +----------------------------+----------------------------+
+
+../virtualenv/lib/python3.8/site-packages/chispa/dataframe_comparer.py:80: DataFramesNotEqualError</failure></testcase></testsuite></testsuites>
