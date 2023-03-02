@@ -18,7 +18,7 @@ def stock_data(spark):
     
 def test_filter_above_400(spark, stock_data):
     expected_data = [
-        {"stock": "BB", "price": 200},
+        {"stock": "BB", "price": 600},
         {"stock": "CC", "price": 750},
     ]
     expected_result = spark.createDataFrame(Row(**x) for x in expected_data)
